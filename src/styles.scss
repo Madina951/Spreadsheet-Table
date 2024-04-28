@@ -1,1 +1,13 @@
-/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Roboto:wght@300&display=swap');
+@import '@angular/cdk/overlay-prebuilt.css';
+
+* {
+    font-family: "Open Sans", sans-serif;
+    font-optical-sizing: auto;
+}
+
+html {
+    background-color: #EEEEEE;
+    padding: 2rem;
+    font-size: 0.75rem;
+}

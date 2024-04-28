@@ -1,0 +1,54 @@
+<ng-container *ngIf="init$ | async">
+    <div class="func-table">
+        <table class="table table-light table-striped table-borderless">
+            <thead class="func-table__thead table-light">
+                <tr class="func-table__tr">
+                    <th #origin *ngFor="let header of headers">
+                        <div class="func-table__th">
+                            <span>{{header.name}}</span>
+                            <ng-container  *ngIf="header.search else switcher">
+                                <i class="bi bi-search" (click)="openPopover(origin, filter, header.name)"></i>
+                                <ng-template #filter>
+                                    <span class="func-table__filter">
+                                        <input type="text" class="func-table__input">
+                                        <i class="bi bi-x-lg func-table__filter-clear"></i>
+                                    </span>
+                                    <div class="func-table__btns-group">
+                                        <button class="func-table__button">OK</button>
+                                        <button class="func-table__button-clear">Сбросить</button>
+                                    </div>
+                                </ng-template>
+                                
+                                
+                            </ng-container>
+                            
+                            <ng-template #switcher>
+                                <i class="bi bi-filter"></i>
+                            </ng-template>
+
+                            
+                            
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody class="func-table__tbody">
+                <tr *ngFor="let row of (table$ | async)">
+                    <td class="func-table__td" scope="row">{{row.brand}}</td>
+                    <td class="func-table__td">{{row.article}}</td>
+                    <td class="func-table__td">{{row.name}}</td>
+                    <td class="func-table__td">{{row.cost}}</td>
+                    <td class="func-table__td" [ngClass]="{'exist': (row.isExistence === 'В наличии')}">{{row.isExistence}}</td>
+                    <td class="func-table__td">{{row.country}}</td>
+                    <td class="func-table__td">{{row.year}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</ng-container>
+
+<button popovertarget="my-popover"> Open Popover </button>
+
+<div id="my-popover" popover>
+    <p>I am a popover with more information.<p>
+</div>

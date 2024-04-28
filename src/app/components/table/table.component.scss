@@ -1,125 +1,155 @@
 .func-table {
-    background-color: #fff;
-    width: 100%;
-    overflow-x: scroll;
-    overflow-y: scroll; 
+  background-color: #fff;
+  width: 100%;
+  min-height: 5rem;
+  max-height: 50rem;
+  overflow-x: auto;
+  overflow-y: auto;
 }
 
 .func-table__thead {
-    background-color: #F3F3F3;
-    display: block;
-    width: 100%;
-    top: 0;
-    position: sticky;
-
-    :first-child {
-        position: sticky;
-        left: 0;
-        z-index: 2;
-    }
+  background-color: #F3F3F3;
+  display: block;
+  width: 100%;
+  top: 0;
+  position: sticky;
+  left: 0;
+  z-index: 10000;
 }
 
 .func-table__tr {
+  position: sticky;
+  top: 0;
+
+  .first {
     position: sticky;
+    left: 0;
+    z-index: 2;
+  }
+
+  .shadow::before {
+    content: ''; 
+    position: absolute;
     top: 0;
-    :first {
-        position: sticky;
-        left: 0;
-        z-index: 2;
-        box-shadow: 1rem 0 0.5rem rgba(0, 0, 0, 0.1);
-    }
+    left: 0;
+    width: 23.5rem;
+    height: 50rem;
+    box-shadow: 1rem 0.8rem 1rem rgba(0, 0, 0, 0.1);
+    z-index: 1;
+  }
 }
 
 .func-table__th {
-   color: #808080;
-   display: flex;
-   justify-content: space-between;
-   min-width: 23rem;
-   padding: 0.3rem;
-//    top: 0;
-//    position: sticky;
-//    z-index: 1;
+  color: #808080;
+  display: flex;
+  justify-content: space-between;
+  width: 23rem;
+  padding: 0.3rem;
+  position: relative;
 }
 
 .func-table__tbody {
-    display: block;
-    max-height: 50rem;
-    max-width: 100%;
-    // overflow-y: auto;
+  display: block;
 
-    td:first-child {
-        position: sticky;
-        left: 0;
-        z-index: 2;
-        // box-shadow: 5rem 0 0.5rem rgba(0, 0, 0, 0.9);
-    }
+  td:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 2;
+    // box-shadow: 5rem 0 0.5rem rgba(0, 0, 0, 0.9);
+  }
 }
 
 .func-table__td {
-    min-width: 24rem;
-    padding: 1rem;
+  min-width: 24rem;
+  padding: 1rem;
 }
 
 .table {
-    width: 100%;
-    border-collapse: collapse;
-    table-layout: fixed;
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
 }
-
 
 
 .exist {
-    color: #00A0E3;
+  color: #00A0E3;
 }
 
 .func-table__filter {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
 }
 
 .func-table__filter-clear {
-    position: absolute;
-    display: block;
-    right: 0.8rem;
-    width: 0.5rem;
-    height: 1rem;
-    color: #000000;
-    font: 1rem monospace;
-    cursor: pointer;
-    z-index: 100;
+  position: absolute;
+  display: block;
+  right: 0.8rem;
+  width: 0.5rem;
+  height: 1rem;
+  color: #000000;
+  font: 1rem monospace;
+  cursor: pointer;
+  z-index: 100;
 }
 
 .func-table__input {
-    padding: 0.5rem 1.3rem 0.5rem 1rem;
-    width: 100%;
-    border: solid 0.031rem #00a0e3;
-    outline: none; 
-    box-sizing: border-box;
+  padding: 0.5rem 1.3rem 0.5rem 1rem;
+  width: 100%;
+  height: 100%;
+  border: solid 0.031rem #00a0e3;
+  outline: none;
+  box-sizing: border-box;
 }
 
 .func-table__btns-group {
-    display: inline-flex;
-    justify-content: space-evenly;
+  display: inline-flex;
+  justify-content: flex-start;
 }
 
 .func-table__button {
-    background-color: #00a0e3;
-    color: #fff;
-    border-radius: 0.25rem;
-    border: none;
+  background-color: #00a0e3;
+  color: #fff;
+  border-radius: 0.25rem;
+  border: none;
+  margin: 0 1rem;
+  font-size: 1.2rem;
 }
 
 .func-table__button-clear {
-    background-color: #fff;
-    color: #ED4E4E;
-    border-radius: 0.25rem;
-    border: solid 0.1rem #ED4E4E;
-
+  background-color: #fff;
+  color: #ED4E4E;
+  border-radius: 0.25rem;
+  border: solid 0.1rem #ED4E4E;
+  font-size: 1.2rem;
 }
 
 #filter {
-    background-color: #fff;
-    display: flex;
-    flex-direction: column;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-switch {
+  margin: 1rem 1rem 0;
+  font-size: 1.2rem;
+  font-weight: 400;
+}
+
+.super-filter {
+  position: absolute;
+  bottom: -7rem;
+  left: 0;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  row-gap: 2rem;
+}
+
+.func-table__nodata {
+  margin: 5rem 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

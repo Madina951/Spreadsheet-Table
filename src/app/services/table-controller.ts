@@ -1,8 +1,8 @@
 import { Injectable } from "@angular/core";
 import { HttpService } from "./http.service";
 import { TableRow } from "../models/tableRow.model";
-import { Search } from "../models/search.model";
 import { Observable } from "rxjs";
+import { TableFilter } from "../models/filter.model";
 
 
 @Injectable({providedIn: 'root'})
@@ -11,9 +11,9 @@ export class TableController {
         private http: HttpService
     ) {}
 
-    loadTable$(request: Search[]): Observable<TableRow[]> {
+    loadTable$(request: TableFilter): Observable<TableRow[]> {
         
-        const params = {search: JSON.stringify(request)};
+        const params = {filter: JSON.stringify(request)};
 
         return this.http.get<TableRow[]>('/api/table', params);
     }

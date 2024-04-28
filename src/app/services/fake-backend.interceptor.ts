@@ -15,7 +15,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
 
         if(req.url.includes('api/table')) {
             return this.fakeBackend.loadTable$(
-                    JSON.parse(req.params.get('search')!)
+                    JSON.parse(req.params.get('filter')!)
                 );
         }
         return next.handle(req);

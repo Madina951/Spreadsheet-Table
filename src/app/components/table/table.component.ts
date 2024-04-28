@@ -1,56 +1,78 @@
-import { ChangeDetectionStrategy, Component, TemplateRef } from '@angular/core';
-import { Headers } from '../../models/headers.model';
-import { Observable, defer } from 'rxjs';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { defer, map, Observable } from 'rxjs';
 import { TableRow } from '../../models/tableRow.model';
 import { TableService } from '../../services/table.service';
-import { Search } from '../../models/search.model';
-import { MyFilter } from '../../models/filter.model';
 import { PopoverService } from '../popover/popover.service';
-import { OverlayRef } from '@angular/cdk/overlay';
+import { TableFilter, TableFilterType, TableHeader } from '../../models/filter.model';
 
 @Component({
   selector: 'app-table',
   templateUrl: './table.component.html',
   styleUrl: './table.component.scss',
-  providers: [TableService]
+  providers: [TableService],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TableComponent {
 
   table$: Observable<TableRow[]> = defer(() => this.tableService.rows$);
-  search$: Observable<Search[]> = defer(() => this.tableService.search$);
+  // filters$: Observable<TableFilter> = defer(() => this.tableService.getFilterTable$());
   init$: Observable<any> = defer(() => this.tableService.init$());
 
-  filterOverlays: Record<string, OverlayRef> = {};
+  filterOverlays: Record<string, boolean> = {};
 
-  headers: Headers[] = [
-    {name: 'Бренд', search: true},
-    {name: 'Артикул', search: true}, 
-    {name: 'Наименование товара', search: true}, 
-    {name: 'Цена', search: true},
-    {name: 'Наличие', search: false},
-    {name: 'Страна', search: true},
-    {name: 'Год', search: true}  
+  headers: TableHeader[] = [
+    {id: 'brand', name: 'Бренд', filterType: 'text'},
+    {id: 'article', name: 'Артикул', filterType: 'text'},
+    {id: 'name', name: 'Наименование товара', filterType: 'text'},
+    {id: 'cost', name: 'Цена', filterType: 'text'},
+    {id: 'isExistence', name: 'Наличие', filterType: 'switcher'},
+    {id: 'country', name: 'Страна', filterType: 'text'},
+    {id: 'year', name: 'Год', filterType: 'text'}
   ];
 
   constructor(
     private tableService: TableService,
     private popoverService: PopoverService
-  ) {}
-
-  openPopover(origin: HTMLElement, content: TemplateRef<any>, header: string) {
-    const overlayRef = this.filterOverlays[header];
-
-    if (overlayRef) {
-      overlayRef.dispose();
-      this.filterOverlays[header] = undefined;
-      return;
-    }
-    
-    this.filterOverlays[header] = this.popoverService.open(origin, content);
+  ) {
   }
 
-  // setNewFilters(filter: MyFilter) {
-  //   filter = (...filter);
-  // }
+  openPopover(header: string) {
 
+    if (!this.filterOverlays[header]) {
+      this.filterOverlays[header] = true;
+      return;
+    }
+
+    this.filterOverlays[header] = !this.filterOverlays[header];
+  }
+
+  addShadow(event: Event) {
+    const scrollLeft = (event.target as HTMLElement).scrollLeft;
+    const shadow = document.querySelector('.func-table__tr .first') as HTMLElement;
+
+    if (scrollLeft > 0) {
+      shadow.classList.add('shadow');
+    } else {
+      shadow.classList.remove('shadow');
+    }
+  }
+
+  setFilters(header: TableHeader, value: string | boolean) {
+    this.tableService.setFilterValue(header.id, {type: header.filterType, value});
+    this.openPopover(header.id);
+  }
+
+  getFilterValue$(header: TableHeader): Observable<string | boolean> {
+    return this.tableService.getFilterValue$(header.id).pipe(
+      map(filterValue => filterValue?.value ?? getDefaultFilterValue(header.filterType))
+    );
+    function getDefaultFilterValue(type: TableFilterType): string | boolean {
+      return type === 'text' ? '' : false;
+    }
+  }
+
+  clearFilter(header: string) {
+    this.tableService.clearFilter(header);
+    this.openPopover(header);
+  }
 }

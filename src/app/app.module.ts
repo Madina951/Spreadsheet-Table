@@ -8,6 +8,7 @@ import { HTTP_INTERCEPTORS, HttpClientModule, provideHttpClient } from '@angular
 import { FakeBackend } from './services/fake-backend';
 import { FakeBackendInterceptor } from './services/fake-backend.interceptor';
 import { PopoverModule } from './components/popover/popover.module';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { PopoverModule } from './components/popover/popover.module';
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
-    PopoverModule
+    PopoverModule,
+    FormsModule
   ],
   providers: [
     provideHttpClient(),

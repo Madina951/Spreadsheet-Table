@@ -1,33 +1,44 @@
 <ng-container *ngIf="init$ | async">
-    <div class="func-table">
+    <div class="func-table" (scroll)="addShadow($event)">
         <table class="table table-light table-striped table-borderless">
             <thead class="func-table__thead table-light">
                 <tr class="func-table__tr">
-                    <th #origin *ngFor="let header of headers">
+                    <th *ngFor="let header of headers; first as first" [class.first]="first">
                         <div class="func-table__th">
                             <span>{{header.name}}</span>
-                            <ng-container  *ngIf="header.search else switcher">
-                                <i class="bi bi-search" (click)="openPopover(origin, filter, header.name)"></i>
-                                <ng-template #filter>
+
+                            <ng-container *ngIf="header.filterType === 'text' else switcher">
+                                <i class="bi bi-search" (click)="openPopover(header.id)"></i>
+
+                                <div class="super-filter" *ngIf="this.filterOverlays[header.id]">
                                     <span class="func-table__filter">
-                                        <input type="text" class="func-table__input">
-                                        <i class="bi bi-x-lg func-table__filter-clear"></i>
+                                        <input #search type="text" class="func-table__input" 
+                                            [value]="getFilterValue$(header) | async">
+                                        <i class="bi bi-x-lg func-table__filter-clear" (click)="search.value = ''"></i>
                                     </span>
                                     <div class="func-table__btns-group">
-                                        <button class="func-table__button">OK</button>
-                                        <button class="func-table__button-clear">Сбросить</button>
+                                        <button class="func-table__button" (click)="setFilters(header, search.value)">OK</button>
+                                        <button class="func-table__button-clear" (click)="clearFilter(header.id)">Сбросить</button>
                                     </div>
-                                </ng-template>
-                                
-                                
+                                </div>
                             </ng-container>
-                            
+
                             <ng-template #switcher>
-                                <i class="bi bi-filter"></i>
+                                <i class="bi bi-filter" (click)="openPopover(header.id)"></i>
+
+                                <div class="super-filter" *ngIf="this.filterOverlays[header.id]">
+                                    <div class="form-check form-switch">
+                                        <input #switch class="form-check-input" type="checkbox" id="switch" 
+                                            [checked]="getFilterValue$(header) | async">
+                                        <label class="form-check-label" for="switch">В наличии</label>
+                                    </div>
+                                    <div class="func-table__btns-group">
+                                        <button class="func-table__button" (click)="setFilters(header, switch.checked)">OK</button>
+                                        <button class="func-table__button-clear" (click)="clearFilter(header.id)">Сбросить</button>
+                                    </div>
+                                </div>
                             </ng-template>
 
-                            
-                            
                         </div>
                     </th>
                 </tr>
@@ -38,17 +49,13 @@
                     <td class="func-table__td">{{row.article}}</td>
                     <td class="func-table__td">{{row.name}}</td>
                     <td class="func-table__td">{{row.cost}}</td>
-                    <td class="func-table__td" [ngClass]="{'exist': (row.isExistence === 'В наличии')}">{{row.isExistence}}</td>
+                    <td class="func-table__td" [ngClass]="{'exist': row.isExistence}">
+                        {{row.isExistence ?  'В наличии' : 'Нет в наличии'}}</td>
                     <td class="func-table__td">{{row.country}}</td>
                     <td class="func-table__td">{{row.year}}</td>
                 </tr>
+                <h5 *ngIf="!(table$ | async).length" class="func-table__nodata">По данному запросу товаров не найдено</h5>
             </tbody>
         </table>
     </div>
 </ng-container>
-
-<button popovertarget="my-popover"> Open Popover </button>
-
-<div id="my-popover" popover>
-    <p>I am a popover with more information.<p>
-</div>
